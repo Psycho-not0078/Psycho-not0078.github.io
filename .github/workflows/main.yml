@@ -1,13 +1,14 @@
 name: CI
 
 on:
-  pull_request:
+  pull_request_target:
     types:
       - opened
-      - edited
-      - synchronize
-      - reopened
-  workflow_call:
+    branches:
+      - 'releases/**'
+  push:
+    branches:
+      - 'main'
 
 jobs:
   build:
