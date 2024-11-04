@@ -5,7 +5,7 @@ modDatetime: 2024-11-04T15:00:00Z
 title: Using Laurel to ease auditd log's Ingestion
 slug: Wazuh-AuditD-and-Laurel
 featured: true
-draft: true
+draft: false
 tags:
   - Wazuh
   - Endpoint Security
@@ -41,4 +41,8 @@ After which extract and install using the following commands:
 tar xzf laurel-$FLAVOR.tar.gz laurel
 sudo install -m755 laurel /usr/local/sbin/laurel
 ```
-2. Setup and configure Laurel
+### 2. Setup and configure Laurel
+
+### 3. Configure wazuh agent to retrieve laurel logs instead of auditd logs
+
+### 4. Configure decoders and rules for auditd logs.
