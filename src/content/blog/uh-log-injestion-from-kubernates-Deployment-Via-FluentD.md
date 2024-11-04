@@ -1,7 +1,7 @@
 ---
 author: Sathya Narayana Bhat
 pubDatetime: 2024-11-02T15:22:00Z
-modDatetime: 2023-12-21T09:12:47.400Z
+modDatetime: 2023-11-04T15:00:00Z
 title: Wazuh log injestion from kubernates Deployment Via FluentD 
 slug: Wazuh-log-injestion-from-kubernates-Deployment-Via-FluentD 
 featured: true
@@ -11,8 +11,7 @@ tags:
   - FluentD
   - Log-ingestion
 description:
-  Some rules & recommendations for creating or adding new posts using AstroPaper
-  theme.
+  A simple guide on how to ingest application logs, deployed in kubernates, with the help of fluentd and fluentbit.
 ---
 Imagine if u have an application deployed in a kubernates cluster, you would want to have its log ingested into wazuh, To do it we install fluentd and fluentbit into the cluster and node respectively.
 
