@@ -145,4 +145,5 @@ spec:
 </decoder>
 ```
 - Create rules too for the same and then everyone is happy
-![Alt text](https://media.tenor.com/La4qeHdSXx4AAAAM/family-guy-peter-griffin.gif "well damm, image didnt load")
+
+  ![Alt text](https://media.tenor.com/La4qeHdSXx4AAAAM/family-guy-peter-griffin.gif "well damm, image didnt load")

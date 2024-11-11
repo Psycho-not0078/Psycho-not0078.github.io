@@ -19,7 +19,7 @@ description:
 LAUREL is an event post-processing plugin for auditd(8) that generates useful, enriched JSON-based audit logs suitable for modern security monitoring setups.
 
 ## Basic Flow
-![alt text](image.png)
+![alt text](../../assets/images/Laurel_flow.png)
 
 ## Steps Overview:
 - On the VM/physical Machine:
