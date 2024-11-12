@@ -20,7 +20,9 @@ If there is ONE game i have suffered through hell to make it work on linux is ..
 
 ![alt text](https://media.tenor.com/a0WzmV84BrkAAAAM/prepare-for-titanfall.gif)
 
-If it wasnt clear, the game i am talking about is titanfall. So i searched the world wide web, Tried various methods, most didnt work. So if this gets famous, well at the least some more people will know how to setup one of the most annoying launcher [competing with ubisoft, tho that did work in one shot with no configuration changes]. so...Lets jump right into it
+<center>If it wasnt clear, the game i am talking about is titanfall.</center>
+<br>
+So i searched the world wide web, Tried various methods, most didnt work. So if this gets famous, well at the least some more people will know how to setup one of the most annoying launcher [competing with ubisoft, tho that did work in one shot with no configuration changes]. so...Lets jump right into it
 
 ## Steps
 
