@@ -18,7 +18,7 @@ description:
 
 If there is ONE game i have suffered through hell to make it work on linux is ... 
 <center>
-    <img src="/public/prepare-for-titanfall.gif">
+    <img src="https://media.tenor.com/a0WzmV84BrkAAAAM/prepare-for-titanfall.gif">
 </center>
 <center>
     If it wasnt clear, the game i am talking about is titanfall
@@ -39,8 +39,7 @@ So i searched the world wide web, Tried various methods, most didnt work. So if 
 - It will install EA Play, which may take a minute
 - Stop the game after EA Play installation is complete and game launches
 - Change proton version to proton experimental
-- <img src="/public/prepare-for-titanfall.gif">
-  prepare for titan fall
+- ![alt text](https://www.icegif.com/wp-content/uploads/2022/06/icegif-78.gif))prepare for titan fall
 
 
 This should work for pretty much all EA games, n if it didnt let me know, will try to help.
