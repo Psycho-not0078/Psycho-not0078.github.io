@@ -1,7 +1,7 @@
 ---
 author: Sathya Narayana Bhat
 pubDatetime: 2024-11-04T15:00:00Z
-modDatetime: 2024-11-11T15:23:43Z
+modDatetime: 2024-11-22T08:16:10Z
 title: Wazuh AWS Integration
 slug: Wazuh-AWS-Integration
 featured: false
@@ -36,7 +36,7 @@ description:
 
 ### Creating a S3 bucket
 
-Just create a bucket with default permissions no requirements additional here
+- Just create a bucket with default permissions no requirements additional here
 
 ### Configure a Cloud trail to dump logs into the created S3 bucket
 
@@ -72,13 +72,13 @@ Just create a bucket with default permissions no requirements additional here
 
  
 
-6. Create a policy and attach it to the created user-group
+### Create a policy and attach it to the created user-group
 
-7. Click Policies > Create policy
+1. Click Policies > Create policy
 
-8. Switch to JSON Editor
+3. Switch to JSON Editor
 
-9. Add the required resources and Action in it, sample given below: 
+3. Add the required resources and Action in it, sample given below: 
 
 ```json
     "Version": "2012-10-17",
@@ -98,68 +98,68 @@ Just create a bucket with default permissions no requirements additional here
     ]
 }
 ```
-10. Confirm and create the policy.
+4. Confirm and create the policy.
 
-11. Go the User group created
+5. Go the User group created
 
-12. Navigate to Permissions , click on Add permissions, then Attach policies.
+6. Navigate to Permissions , click on Add permissions, then Attach policies.
 
-13. Search the policy created and attach it to the group.
+7. Search the policy created and attach it to the group.
 
-14. Review and confirm it.
+8. Review and confirm it.
 
 ### Configure a role for user to assume
 
-16. Go to Roles on the left side of the AWS console in IAM and click Create role.
+1. Go to Roles on the left side of the AWS console in IAM and click Create role.
 
-17. Choose AWS service as Trusted entity type, S3 as service and Use case then click Next.
+2. Choose AWS service as Trusted entity type, S3 as service and Use case then click Next.
 
-Choose the previously created policy as permission.
+3. Choose the previously created policy as permission.
 
-Add the Created User’s ARN number as the following format: 'AWS':'<ARN>' under Principal in Trust Policy
+4. Add the Created User’s ARN number as the following format: 'AWS':'<ARN>' under Principal in Trust Policy
 
-Review and create the role.
+5. Review and create the role.
 
-Go to the Policy Created and edit the Permissions as follows:
+6. Go to the Policy Created and edit the Permissions as follows:
 
-Add the sys:AssumeRolepermission under Actions 
+7. Add the sys:AssumeRolepermission under Actions 
 
-Add the ARN of the Created Role under Resource
+8. Add the ARN of the Created Role under Resource
 
-Copy and store the ARN of the create Role.
+9. Copy and store the ARN of the create Role.
 
-Installing Boto3 in wazuh to use aws sdk.
+### Installing Boto3 in wazuh to use aws sdk.
 
-Install python3 and pip3 if they are not present
+1. Install python3 and pip3 if they are not present
 
-pip3 install --upgrade pip
+2.    ```pip3 install --upgrade pip```
 
-Run a. in case the python version is <3.10, b. in case of python version >3.11 
+3. Run a. in case the python version is `<3.10`, b. in case of python version `>3.11` 
 
-pip3 install boto3==1.34.135 pyarrow==14.0.1 numpy==1.26.0
+    a. ```pip3 install boto3==1.34.135 pyarrow==14.0.1 numpy==1.26.0```
 
-pip3 install --break-system-packages boto3==1.34.135 pyarrow==14.0.1 numpy==1.26.0
+    b. ```pip3 install --break-system-packages boto3==1.34.135 pyarrow==14.0.1 numpy==1.26.0```
 
-Configure wazuh to use the user and role created to read the s3 bucket.
+### Configure wazuh to use the user and role created to read the s3 bucket.
 
-Create a file in the root home directory /root/.aws/credentials with the Values of the user created in the following format: 
-```conf
-[default]
-aws_access_key_id=<Access Key ID>
-aws_secret_access_key=<Secret Access Key>
-region=us-east-1
-```
-Add the following into ossec.conf:
-```xml
-<ossec_config>  
-  <bucket type="cloudtrail">
-    <name><WAZUH_AWS_BUCKET></name>
-    <aws_profile>default</aws_profile>
-    <iam_role_arn><ARN of Role Created></iam_role_arn>
-  </bucket>
-</ossec_config>
-```
-Restart the wazuh manager service using systemctl restart wazuh-manager
+1. Create a file in the root home directory /root/.aws/credentials with the Values of the user created in the following format: 
+    ```conf
+    [default]
+    aws_access_key_id=<Access Key ID>
+    aws_secret_access_key=<Secret Access Key>
+    region=us-east-1
+    ```
+2. Add the following into ossec.conf:
+    ```xml
+    <ossec_config>  
+    <bucket type="cloudtrail">
+        <name><WAZUH_AWS_BUCKET></name>
+        <aws_profile>default</aws_profile>
+        <iam_role_arn><ARN of Role Created></iam_role_arn>
+    </bucket>
+    </ossec_config>
+    ```
+3. Restart the wazuh manager service using systemctl restart wazuh-manager
 
-Demo
+## Demo
 
