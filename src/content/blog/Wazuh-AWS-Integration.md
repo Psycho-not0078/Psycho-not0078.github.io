@@ -5,7 +5,7 @@ modDatetime: 2024-11-22T08:16:10Z
 title: Wazuh AWS Integration
 slug: Wazuh-AWS-Integration
 featured: false
-draft: true
+draft: false
 tags:
   - Wazuh
   - AWS
