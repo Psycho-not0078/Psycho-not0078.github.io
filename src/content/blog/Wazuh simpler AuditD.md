@@ -16,12 +16,15 @@ description:
   A easier way to import auditd logs into wazuh via laurel.
 ---
 ## Description
+
 LAUREL is an event post-processing plugin for auditd(8) that generates useful, enriched JSON-based audit logs suitable for modern security monitoring setups.
 
 ## Basic Flow
+
 ![alt text](../../assets/images/Laurel_flow.png)
 
-## Steps Overview:
+## Steps Overview
+
 - On the VM/physical Machine:
   - Installing Laurel
   - Configure Laurel
@@ -31,8 +34,10 @@ LAUREL is an event post-processing plugin for auditd(8) that generates useful, e
 
   - Implement Rules and decoder for Laurel in wazuh
 
-## Steps in Detail:
+## Steps in Detail
+
 ### 1. Installation
+
 Download the latest version of laurel from [Releases · threathunters-io/laurel](https://github.com/threathunters-io/laurel/releases/latest), there are multiple versions in accordance to the architecture of the vm/machine.
 
 After which extract and install using the following commands:
@@ -41,16 +46,20 @@ After which extract and install using the following commands:
 tar xzf laurel-$FLAVOR.tar.gz laurel
 sudo install -m755 laurel /usr/local/sbin/laurel
 ```
+
 ### 2. Setup and configure Laurel
 
 So, following the official documentation our following steps should be:
 
 - Create a dedicated user
+
   ```shell
   sudo useradd --system --home-dir /var/log/laurel --create-home _laurel
   ```
+
 - Add /etc/laurel/config.toml, the file that controls laurel
   - Add the following config for optimal working:
+
   ```toml
   directory = "/var/log/laurel"
   user = "_laurel"
@@ -173,8 +182,10 @@ So, following the official documentation our following steps should be:
   # What to do with filtered events? "drop" or "log" to the filterlog
   # defined above.
   filter-action = "drop"
-  ``` 
+  ```
+
 - Register LAUREL as an auditd plugin by adding the following:
+
   ```conf
     active = yes
     direction = out
@@ -183,13 +194,17 @@ So, following the official documentation our following steps should be:
     path = /usr/local/sbin/laurel
     args = --config /etc/laurel/config.toml
   ```
+
 - Restart AuditD by the following:
+
   ```shell
   sudo pkill -HUP auditd
   ```
 
 ### 3. Configure wazuh agent to retrieve laurel logs instead of auditd logs
+
 - We need to add the following lines to wazuh agent's ossec.conf (which is located in /var/ossec/etc/ossec.conf and will require sudo), will expain what it does in a min
+
   ```xml
   <ossec_config>
     <localfile>
@@ -197,15 +212,20 @@ So, following the official documentation our following steps should be:
       <location>/var/log/laurel/auth.json</location><!-- the location specified in /etc/laurel/config.toml as directory-->
     </localfile>
   </ossec_config>
-  ``` 
+  ```
+
 - The addition is simple
   - ```<log_format>``` specifies the format of the logs present in laruel's logfile,
   - ```<location>``` specifies the location of the logfile to be read
 
-- Restart wazuh agent by running 
+- Restart wazuh agent by running
+
   ```shell
   sudo systemctl restart wazuh-agent
   ``` 
-- Work done on agent side, on to the server. 
-### 4. Configure decoders and rules for auditd logs.
-(TBD)
+
+- Work done on agent side, on to the server.
+
+### 4. Configure decoders and rules for Laurel/auditd logs
+
+- Since Laurel Logs are proper JSON Logs, writing a decoder for the same is simple json decoder.
