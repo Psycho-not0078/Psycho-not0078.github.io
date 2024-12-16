@@ -42,4 +42,4 @@ So i searched the world wide web, Tried various methods, most didnt work. So if 
 
 This should work for pretty much all EA games, n if it didnt let me know, will try to help.
 
-the end
+## The end
