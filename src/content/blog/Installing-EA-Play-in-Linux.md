@@ -1,5 +1,5 @@
 ---
-author: Sat Naing
+author: Sathya Narayana Bhat
 pubDatetime: 2024-11-11T17:24:29Z
 modDatetime: 2024-11-11T17:24:29Z
 title: Setting up EA Play in Linux via Steam 

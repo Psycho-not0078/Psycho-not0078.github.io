@@ -160,6 +160,3 @@ description:
     </ossec_config>
     ```
 3. Restart the wazuh manager service using systemctl restart wazuh-manager
-
-## Demo
-
