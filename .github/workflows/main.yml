@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: "☁️ Checkout repository"
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: "🔧 Setup Node.js ${{ matrix.node-version }}"
         uses: actions/setup-node@v4
@@ -55,6 +57,7 @@ jobs:
 
 
       - name: "🔎 Lint code"
+        if: steps.integrationTests.outcome == 'success'
         run: npm run lint
 
       - name: "🚀 Build the project"

@@ -242,4 +242,4 @@ So, following the official documentation our following steps should be:
   ...
   </group>
   ```
-- You can build on top of this rule as per requirement, enjoy
+- You can build on top of this rule as per requirement, enjoy.
