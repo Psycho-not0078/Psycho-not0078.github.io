@@ -1,7 +1,7 @@
 ---
 author: Sathya Narayana Bhat
 pubDatetime: 2024-11-04T15:00:00Z
-modDatetime: 2024-11-11T15:23:43Z
+modDatetime: 2024-12-16T11:31:46Z
 title: Using Laurel to ease auditd log's Ingestion
 slug: Wazuh-AuditD-and-Laurel
 featured: true
@@ -228,4 +228,18 @@ So, following the official documentation our following steps should be:
 
 ### 4. Configure decoders and rules for Laurel/auditd logs
 
-- Since Laurel Logs are proper JSON Logs, writing a decoder for the same is simple json decoder.
+- Since Laurel Logs are proper JSON Logs, no need to write a decoder, just start with a base rule and build on top of it.
+- The following is the base rule i wrote, it can be changed according to necessity
+  ```xml
+  <group name="local,auditd,">
+
+    <rule id="100002" level="2">
+         <decoded_as>json</decoded_as>
+         <field name="SYSCALL.SYSCALL">execve</field>
+        <description>Auditd syscall base_rule</description>
+        <group>audit_command,syscall,laurel,</group>
+    </rule>
+  ...
+  </group>
+  ```
+- You can build on top of this rule as per requirement, enjoy
