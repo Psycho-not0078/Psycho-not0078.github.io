@@ -40,8 +40,8 @@ jobs:
         run: |
             timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
             git fetch origin $GITHUB_BASE_REF
-            Addeddiff=$(git diff --name-status --diff-filter=A origin/main..HEAD | awk '{print $2}')
-            Updateddiff=$(git diff --name-status --diff-filter=M origin/main..HEAD | awk '{print $2}')
+            Addeddiff=$(git diff --name-status --diff-filter=A origin/$GITHUB_BASE_REF..HEAD | awk '{print $2}')
+            Updateddiff=$(git diff --name-status --diff-filter=M origin/$GITHUB_BASE_REF..HEAD | awk '{print $2}')
             echo "::debug::Added Files - $Addeddiff"
             for updated_file in $Updateddiff; do
                 if [[ "$file" == *.md || "$file" == *.markdown ]]; then
