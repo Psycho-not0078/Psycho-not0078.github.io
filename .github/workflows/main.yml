@@ -47,13 +47,11 @@ jobs:
               Addeddiff=$(git diff --name-status --diff-filter=A ${{ github.event.before }} ${{ github.event.after }} | awk '{print $2}')
               Updateddiff=$(git diff --name-status --diff-filter=M ${{ github.event.before }} ${{ github.event.after }} | awk '{print $2}')
             fi
-              echo "Added Files - $Addeddiff" >> $GITHUB_OUTPUT
             for updated_file in $Updateddiff; do
                 if [[ "$file" == *.md || "$file" == *.markdown ]]; then
                   ./update_timestamp.sh "$timestamp" $updated_file update
                 fi
             done
-            echo "Updated Files - $Updateddiff" >> $GITHUB_OUTPUT
             for added_files in $Addeddiff; do
                 if [[ "$file" == *.md || "$file" == *.markdown ]]; then
                   ./update_timestamp.sh "$timestamp" $added_files create
