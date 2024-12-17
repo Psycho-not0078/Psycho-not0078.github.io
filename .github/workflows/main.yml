@@ -57,7 +57,7 @@ jobs:
 
 
       - name: "🔎 Lint code"
-        if: steps.integrationTests.outcome == 'success'
+        if: steps.changed-files.outcome == 'success'
         run: npm run lint
 
       - name: "🚀 Build the project"
