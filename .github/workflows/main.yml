@@ -1,5 +1,5 @@
 name: CI
-
+run-name: 🚀 Render Blog
 on:
   pull_request_target:
     types:
@@ -39,16 +39,20 @@ jobs:
         id: changed-files
         run: |
             timestamp=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
-            git fetch origin $GITHUB_BASE_REF
-            Addeddiff=$(git diff --name-status --diff-filter=A origin/$GITHUB_BASE_REF..HEAD | awk '{print $2}')
-            Updateddiff=$(git diff --name-status --diff-filter=M origin/$GITHUB_BASE_REF..HEAD | awk '{print $2}')
-            echo "::debug::Added Files - $Addeddiff"
+            if ${{ github.event_name == 'pull_request' }}; then
+              Addeddiff=$(git diff --name-status --diff-filter=A -r HEAD^1 HEAD | awk '{print $2}')
+              Updateddiff=$(git diff --name-status --diff-filter=M -r HEAD^1 HEAD | awk '{print $2}')
+            else
+              Addeddiff=$(git diff --name-status --diff-filter=A ${{ github.event.before }} ${{ github.event.after }} | awk '{print $2}')
+              Updateddiff=$(git diff --name-status --diff-filter=M ${{ github.event.before }} ${{ github.event.after }} | awk '{print $2}')
+            fi
+              echo "::debug::Added Files - $Addeddiff" >> $GITHUB_OUTPUT
             for updated_file in $Updateddiff; do
                 if [[ "$file" == *.md || "$file" == *.markdown ]]; then
                   ./update_timestamp.sh "$timestamp" $updated_file update
                 fi
             done
-            echo "::debug::Updated Files - $Updateddiff"
+            echo "::debug::Updated Files - $Updateddiff" >> $GITHUB_OUTPUT
             for added_files in $Addeddiff; do
                 if [[ "$file" == *.md || "$file" == *.markdown ]]; then
                   ./update_timestamp.sh "$timestamp" $added_files create
