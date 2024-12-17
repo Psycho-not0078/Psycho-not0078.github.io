@@ -31,6 +31,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
+          cache-dependency-path: ./package.json
 
       - name: "📦 Install dependencies"
         run: npm ci
@@ -46,13 +47,13 @@ jobs:
               Addeddiff=$(git diff --name-status --diff-filter=A ${{ github.event.before }} ${{ github.event.after }} | awk '{print $2}')
               Updateddiff=$(git diff --name-status --diff-filter=M ${{ github.event.before }} ${{ github.event.after }} | awk '{print $2}')
             fi
-              echo "::debug::Added Files - $Addeddiff" >> $GITHUB_OUTPUT
+              echo "Added Files - $Addeddiff" >> $GITHUB_OUTPUT
             for updated_file in $Updateddiff; do
                 if [[ "$file" == *.md || "$file" == *.markdown ]]; then
                   ./update_timestamp.sh "$timestamp" $updated_file update
                 fi
             done
-            echo "::debug::Updated Files - $Updateddiff" >> $GITHUB_OUTPUT
+            echo "Updated Files - $Updateddiff" >> $GITHUB_OUTPUT
             for added_files in $Addeddiff; do
                 if [[ "$file" == *.md || "$file" == *.markdown ]]; then
                   ./update_timestamp.sh "$timestamp" $added_files create
