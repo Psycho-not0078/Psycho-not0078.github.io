@@ -14,7 +14,7 @@ description:
   A easier way to import auditd logs into wazuh via laurel.
 ---
 
-## Basic Steps involved:
+## Basic Steps involved
 
 1. Create a S3 bucket
 
@@ -32,7 +32,7 @@ description:
 
 8. Configure wazuh to use the user and role created to read the s3 bucket.
 
-## Steps in Detail:
+## Steps in Detail
 
 ### Creating a S3 bucket
 
@@ -44,17 +44,11 @@ description:
 
 2. Specify the trail name, and choose existing s3 bucket for storage location.
 
- 
-
 3. Choose relevant logs that needs to be logged into wauzh, which is divided into Management, Data and Insights events.
 
 4. Specify the filters for relavent events.
 
- 
-
 5. Review and Create the trail
-
-
 
 ### Configure a user and usergroup to access the s3 bucket
 
@@ -62,15 +56,11 @@ description:
 
 2. Create a User attached to the User Group Created
 
-3. Then go to Security credentials, scroll down to Access keys, and click Create access key. 
+3. Then go to Security credentials, scroll down to Access keys, and click Create access key.
 
-4. Select and confirm the Command Line Interface (CLI) use case and click Next 
-
- 
+4. Select and confirm the Command Line Interface (CLI) use case and click Next
 
 5. Create the key, save that key and id as it will be required in upcoming set
-
- 
 
 ### Create a policy and attach it to the created user-group
 
@@ -78,7 +68,7 @@ description:
 
 3. Switch to JSON Editor
 
-3. Add the required resources and Action in it, sample given below: 
+3. Add the required resources and Action in it, sample given below:
 
 ```json
     "Version": "2012-10-17",
@@ -98,6 +88,7 @@ description:
     ]
 }
 ```
+
 4. Confirm and create the policy.
 
 5. Go the User group created
@@ -122,34 +113,37 @@ description:
 
 6. Go to the Policy Created and edit the Permissions as follows:
 
-7. Add the sys:AssumeRolepermission under Actions 
+7. Add the sys:AssumeRolepermission under Actions
 
 8. Add the ARN of the Created Role under Resource
 
 9. Copy and store the ARN of the create Role.
 
-### Installing Boto3 in wazuh to use aws sdk.
+### Installing Boto3 in wazuh to use aws sdk
 
 1. Install python3 and pip3 if they are not present
 
-2.    ```pip3 install --upgrade pip```
+2. ```pip3 install --upgrade pip```
 
-3. Run a. in case the python version is `<3.10`, b. in case of python version `>3.11` 
+3. Run a. in case the python version is `<3.10`, b. in case of python version `>3.11`
 
     a. ```pip3 install boto3==1.34.135 pyarrow==14.0.1 numpy==1.26.0```
 
     b. ```pip3 install --break-system-packages boto3==1.34.135 pyarrow==14.0.1 numpy==1.26.0```
 
-### Configure wazuh to use the user and role created to read the s3 bucket.
+### Configure wazuh to use the user and role created to read the s3 bucket
 
-1. Create a file in the root home directory /root/.aws/credentials with the Values of the user created in the following format: 
+1. Create a file in the root home directory /root/.aws/credentials with the Values of the user created in the following format:
+
     ```conf
     [default]
     aws_access_key_id=<Access Key ID>
     aws_secret_access_key=<Secret Access Key>
     region=us-east-1
     ```
+
 2. Add the following into ossec.conf:
+
     ```xml
     <ossec_config>  
     <bucket type="cloudtrail">
@@ -159,9 +153,7 @@ description:
     </bucket>
     </ossec_config>
     ```
+
 3. Restart the wazuh manager service using systemctl restart wazuh-manager
 
 ## Demo
-TBD
-
-Sayonara
