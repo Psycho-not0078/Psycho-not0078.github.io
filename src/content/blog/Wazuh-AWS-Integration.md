@@ -66,28 +66,28 @@ description:
 
 1. Click Policies > Create policy
 
-3. Switch to JSON Editor
+2. Switch to JSON Editor
 
 3. Add the required resources and Action in it, sample given below:
 
-```json
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "GetS3Logs",
-            "Effect": "Allow",
-            "Action": [
-                "s3:GetObject",
-                "s3:ListBucket"
-            ],
-            "Resource": [
-                "arn:aws:s3:::<WAZUH_AWS_BUCKET>/*",
-                "arn:aws:s3:::<WAZUH_AWS_BUCKET>"
-            ]
-        }
-    ]
-}
-```
+    ```json
+        "Version": "2012-10-17",
+        "Statement": [
+            {
+                "Sid": "GetS3Logs",
+                "Effect": "Allow",
+                "Action": [
+                    "s3:GetObject",
+                    "s3:ListBucket"
+                ],
+                "Resource": [
+                    "arn:aws:s3:::<WAZUH_AWS_BUCKET>/*",
+                    "arn:aws:s3:::<WAZUH_AWS_BUCKET>"
+                ]
+            }
+        ]
+    }
+    ```
 
 4. Confirm and create the policy.
 

@@ -22,16 +22,16 @@ Imagine if u have an application deployed in a kubernates cluster, you would wan
 |Fluentbit|A lightweight, and highly scalable logging and metrics processor and forwarder|Setup in every node to extract logs from application nodes and store in central location for fluentd access|
 |FluentD| an open-source data collector and log processor that unifies data collection and consumption|Deployed in seperate deployment set to transfer logs out of the cluster into wazuh (or any other log collector/viz)|
 
-## Basic Steps:
+## Basic Steps
 
 - Create a fluentbit deployment (TBA)
 - Create a custom docker image of fluentd daemonset with the following:
 
-  - the fluentd plugin for syslog output GitHub - fluent-plugins-nursery/fluent-plugin-remote_syslog: Fluentd plugin for output to remote syslog serivce (e.g. Papertrail) , using the docker image of fluentd daemonset 
+  - the fluentd plugin for syslog output GitHub - fluent-plugins-nursery/fluent-plugin-remote_syslog: Fluentd plugin for output to remote syslog serivce (e.g. Papertrail) , using the docker image of fluentd daemonset
 
   - Custom fluentd configuration to include config required for the syslog output is added.
 
-  - Upload the custom image to dockerhub[docker login will be required and the image should be public for ease of usage]/ Artifact Registry. 
+  - Upload the custom image to dockerhub[docker login will be required and the image should be public for ease of usage]/ Artifact Registry.
 
   - Change the image used in the kubernates daemonset/statefulset to the custom image created.
   
@@ -155,7 +155,7 @@ Imagine if u have an application deployed in a kubernates cluster, you would wan
 
   <span style="color:red">2024 Jul 18 11:52:01 Fluent_D->10.160.15.217</span> <span style="color:green">Jul 18 06:22:01 Fluent_D fluentd: {"message":"[in_tail_kube_apiserver] /var/log/pods/kube-system_kube-apiserver-minikube_3c555f828409b009ebee39fdbedfcac0/kube-apiserver/0.log unreadable. It is excluded and would be examined next time."}</span>
 
-  The green part is the syslog and all regex, matches, etc should be made with the green text in mind and not including the red part. 
+  The green part is the syslog and all regex, matches, etc should be made with the green text in mind and not including the red part.
 
 - Create decoder for the logs ingested
 

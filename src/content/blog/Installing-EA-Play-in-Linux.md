@@ -39,7 +39,6 @@ So i searched the world wide web, Tried various methods, most didnt work. So if 
 - Change proton version to proton experimental
 - ![alt text](https://www.icegif.com/wp-content/uploads/2022/06/icegif-78.gif)prepare for titan fall
 
-
 This should work for pretty much all EA games, n if it didnt let me know, will try to help.
 
 ### The end

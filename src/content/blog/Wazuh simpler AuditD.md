@@ -222,7 +222,7 @@ So, following the official documentation our following steps should be:
 
   ```shell
   sudo systemctl restart wazuh-agent
-  ``` 
+  ```
 
 - Work done on agent side, on to the server.
 
@@ -230,6 +230,7 @@ So, following the official documentation our following steps should be:
 
 - Since Laurel Logs are proper JSON Logs, no need to write a decoder, just start with a base rule and build on top of it.
 - The following is the base rule i wrote, it can be changed according to necessity
+
   ```xml
   <group name="local,auditd,">
 
@@ -242,6 +243,7 @@ So, following the official documentation our following steps should be:
   ...
   </group>
   ```
+
 - You can build on top of this rule as per requirement, enjoy.
 
 ### The End
