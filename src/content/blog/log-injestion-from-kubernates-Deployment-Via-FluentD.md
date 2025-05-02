@@ -1,7 +1,7 @@
 ---
 author: Sathya Narayana Bhat
 pubDatetime: 2024-11-02T15:22:00Z
-modDatetime: 2023-11-04T15:00:00Z
+modDatetime: 2025-05-02T12:00:00Z
 title: Wazuh log injestion from kubernates Deployment Via FluentD 
 slug: Wazuh-log-injestion-from-kubernates-Deployment-Via-FluentD 
 featured: true
@@ -24,7 +24,7 @@ Imagine if u have an application deployed in a kubernates cluster, you would wan
 
 ## Basic Steps:
 
-- Create a fluentbit deployment (TBA)
+- Create a fluentbit deployment with your application
 - Create a custom docker image of fluentd daemonset with the following:
 
   - the fluentd plugin for syslog output GitHub - fluent-plugins-nursery/fluent-plugin-remote_syslog: Fluentd plugin for output to remote syslog serivce (e.g. Papertrail) , using the docker image of fluentd daemonset 
