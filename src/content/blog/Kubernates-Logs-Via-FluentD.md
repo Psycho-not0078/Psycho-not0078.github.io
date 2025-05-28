@@ -25,32 +25,12 @@ Imagine if u have an application deployed in a kubernates cluster, you would wan
 ## Basic Steps:
 
 - **NOTE** the step of configuring fluentbit and forwarding its logs to fluentd is skipped. follow the below tutorial for the same: [Link](https://medium.com/hepsiburadatech/fluent-logging-architecture-fluent-bit-fluentd-elasticsearch-ca4a898e28aa)
-- Create a custom docker image of fluentd daemonset with the following:
-
-  - the fluentd plugin for syslog output GitHub - fluent-plugins-nursery/fluent-plugin-remote_syslog: Fluentd plugin for output to remote syslog serivce (e.g. Papertrail) , using the docker image of fluentd daemonset 
-
-  - Custom fluentd configuration to include config required for the syslog output is added.
-
-  - Upload the custom image to dockerhub[docker login will be required and the image should be public for ease of usage]/ Artifact Registry. 
-
-  - Change the image used in the kubernates daemonset/statefulset to the custom image created.
+- Create a fluentd configmap 
+- Create a fluentd deployment with the syslog plugin
+- Configure wazuh to listen to a syslog port
+- Configure rules and decoder for the syslog data.
   
 ## Steps in Detailed
-
-- Create a custom docker image of fluentd which contains the output to syslog plugin:
-
-  ```dockerfile
-  FROM fluent/fluentd-kubernetes-daemonset:v1-debian-elasticsearch8
-  RUN fluent-gem install fluent-plugin-remote_syslog
-  ```
-
-- Build, tag and push the image into dockerhub/Artifact Registry, by executing the following:
-
-  ```bash
-  docker build -t <image name> ./ 
-  docker image tag <image name> <username>/<image name>:<tag>
-  docker image push <username>/<image name>:<tag>
-  ```
 
 - Create a fluent.conf configmap.
 
