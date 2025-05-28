@@ -24,7 +24,7 @@ Imagine if u have an application deployed in a kubernates cluster, you would wan
 
 ## Basic Steps:
 
-- Create a fluentbit deployment with your application
+- **NOTE** the step of configuring fluentbit and forwarding its logs to fluentd is skipped. follow the below tutorial for the same: [Link](https://medium.com/hepsiburadatech/fluent-logging-architecture-fluent-bit-fluentd-elasticsearch-ca4a898e28aa)
 - Create a custom docker image of fluentd daemonset with the following:
 
   - the fluentd plugin for syslog output GitHub - fluent-plugins-nursery/fluent-plugin-remote_syslog: Fluentd plugin for output to remote syslog serivce (e.g. Papertrail) , using the docker image of fluentd daemonset 
@@ -42,24 +42,6 @@ Imagine if u have an application deployed in a kubernates cluster, you would wan
   ```dockerfile
   FROM fluent/fluentd-kubernetes-daemonset:v1-debian-elasticsearch8
   RUN fluent-gem install fluent-plugin-remote_syslog
-  COPY fluent.conf /fluentd/etc/
-  ```
-
-- Create a fluent.conf file in the same folder as the dockerfile:
-
-  ```xml
-    <match **>
-      @type remote_syslog
-      host "#{ENV['SERVER_IP']}"
-      port 514
-      protocol tcp
-      severity debug    
-      program fluentd
-      hostname "#{ENV['HOST_NAME']}"
-      <format>
-        @type json
-      </format>
-    </match>
   ```
 
 - Build, tag and push the image into dockerhub/Artifact Registry, by executing the following:
@@ -70,7 +52,33 @@ Imagine if u have an application deployed in a kubernates cluster, you would wan
   docker image push <username>/<image name>:<tag>
   ```
 
-- Make changes to fluentd kubeconfig file as shown:
+- Create a fluent.conf configmap.
+
+  ```yaml
+  apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    namespace: fluentd
+    name: fluent-conf
+    labels:
+      app: fluentd-logging
+  data:
+    fluentConf: |
+      <match **>
+        @type remote_syslog
+        host "#{ENV['SERVER_IP']}"
+        port 514
+        protocol tcp
+        severity debug    
+        program fluentd
+        hostname "#{ENV['HOST_NAME']}"
+        <format>
+          @type json
+        </format>
+      </match>
+  ```
+
+- Make a fluentd kubeconfig file similar to the below one:
 
   ```yaml
   apiVersion: apps/v1
@@ -79,7 +87,7 @@ Imagine if u have an application deployed in a kubernates cluster, you would wan
     name: fluentd
     namespace: fluentd
     labels:
-      k8s-app: fluentd-logging
+      app: fluentd-logging
       version: v1
       kubernetes.io/cluster-service: "true"
   spec:
@@ -97,11 +105,15 @@ Imagine if u have an application deployed in a kubernates cluster, you would wan
         serviceAccountName: fluentd
         containers:
         - name: fluentd
-          image: <username>/<image>:<tag>
+          image: fluent/fluentd-kubernetes-daemonset:v1.18.0-debian-elasticsearch8-1.4
+          command:
+          - /bin/sh
+          - -c
+          - "fluent-gem install fluent-plugin-remote_syslog ; fluentd -c /fluentd/etc/${FLUENTD_CONF} -p /fluentd/plugins --gemfile /fluentd/Gemfile ${FLUENTD_OPT}"
           env:
-            - name: SERVER_IP
-              value: "SERVER_IP"
-            - name: HOST_NAME
+            - name: DESTINATION
+              value: "syslog-ng.fluentd.svc.cluster.local" 
+            - name: SOURCE
               value: "Fluent_D"
             - name: K8S_NODE_NAME
               valueFrom:
@@ -116,6 +128,10 @@ Imagine if u have an application deployed in a kubernates cluster, you would wan
           - name: dockercontainerlogdirectory
             mountPath: /var/log/pods
             readOnly: true
+          - name: fluentconf-volume
+            mountPath: /fluentd/etc/fluent.conf
+            subPath: fluent.conf
+            readOnly: true
           securityContext:
             allowPrivilegeEscalation: false
             runAsUser: 0
@@ -127,6 +143,12 @@ Imagine if u have an application deployed in a kubernates cluster, you would wan
         - name: dockercontainerlogdirectory
           hostPath:
             path: /var/log/pods
+        - name: fluentconf-volume
+          configMap:
+            name: fluent-conf
+            items:
+              - key: fluentConf
+                path: fluent.conf
   ```
 
 - Make the following Changes into wazuh's ossec.conf file, the change ensures that wazuh will monitor the syslog port [514] for traffic, which will be logged in archive.log and archive.json if log all is enabled.
