@@ -3,7 +3,6 @@ run-name: 🚀 Render Blog
 on: 
   push:
       branches: ['main']
-      paths: ['src/content/blog/','src/assets']
 
 jobs:
   build:
