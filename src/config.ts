@@ -4,7 +4,7 @@ export const SITE: Site = {
   website: "https://blog.homeserverfail.in/",
   author: "Sathya Narayana Bhat",
   profile: "https://github.com/Psycho-not0078/",
-  desc: "desc: "Notes from a DevSecOps engineer's homelab - Kubernetes, GitOps, security tooling, and the things that break.",",
+  desc: "Notes from a DevSecOps engineer's homelab - Kubernetes, GitOps, security tooling, and the things that break.",
   title: "homeserverfail",
   ogImage: "og-default.png",
   lightAndDarkMode: true,
