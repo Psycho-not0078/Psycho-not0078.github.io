@@ -12,7 +12,6 @@ tags:
   - gitops
   - argocd
   - secrets
-  - 
   - selfhosting
   - homelab
 description:
