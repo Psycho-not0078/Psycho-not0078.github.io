@@ -1,53 +1,41 @@
-import type { Site, SocialObjects } from "./types";
+/**
+ * Internal resolved configuration used throughout the codebase.
+ *
+ * Prefer editing `astro-paper.config.ts` instead of this file. This module exists to
+ * apply defaults and expose a fully-resolved config shape (`ResolvedAstroPaperConfig`).
+ */
+import userConfig from "@/astro-paper.config";
+import type { ResolvedAstroPaperConfig } from "./types/config";
+import { PUBLIC_GOOGLE_SITE_VERIFICATION } from "astro:env/client";
 
-export const SITE: Site = {
-  website: "https://blog.homeserverfail.in/",
-  author: "Sathya Narayana Bhat",
-  profile: "https://github.com/Psycho-not0078/",
-  desc: "Notes from a DevSecOps engineer's homelab - Kubernetes, GitOps, security tooling, and the things that break.",
-  title: "homeserverfail",
-  ogImage: "og-default.png",
-  lightAndDarkMode: true,
-  postPerIndex: 4,
-  postPerPage: 3,
-  scheduledPostMargin: 15 * 60 * 1000,
-  showArchives: true,
-  // editPost: {
-  //   url: "https://github.com/Psycho-not0078/Psycho-not0078.github.io/edit/main/src/content/blog",
-  //   text: "Suggest Changes",
-  //   appendFilePath: true,
-  // },
+const DEFAULT_OG_IMAGE = "default-og.jpg";
+
+const config: ResolvedAstroPaperConfig = {
+  site: {
+    ...userConfig.site,
+    ogImage: userConfig.site.ogImage ?? DEFAULT_OG_IMAGE,
+    lang: userConfig.site.lang ?? "en",
+    timezone: userConfig.site.timezone ?? "UTC",
+    dir: userConfig.site.dir ?? "ltr",
+    googleVerification:
+      userConfig.site.googleVerification || PUBLIC_GOOGLE_SITE_VERIFICATION,
+  },
+  posts: {
+    perPage: userConfig.posts?.perPage ?? 4,
+    perIndex: userConfig.posts?.perIndex ?? 4,
+    scheduledPostMargin:
+      userConfig.posts?.scheduledPostMargin ?? 15 * 60 * 1000,
+  },
+  features: {
+    lightAndDarkMode: userConfig.features?.lightAndDarkMode ?? true,
+    dynamicOgImage: userConfig.features?.dynamicOgImage ?? true,
+    showArchives: userConfig.features?.showArchives ?? true,
+    showBackButton: userConfig.features?.showBackButton ?? true,
+    editPost: userConfig.features?.editPost ?? { enabled: false },
+    search: userConfig.features?.search ?? "pagefind",
+  },
+  socials: userConfig.socials ?? [],
+  shareLinks: userConfig.shareLinks ?? [],
 };
 
-export const LOCALE = {
-  lang: "en",
-  langTag: ["en-IN"],
-} as const;
-
-export const LOGO_IMAGE = {
-  enable: false,
-  svg: true,
-  width: 216,
-  height: 46,
-};
-
-export const SOCIALS: SocialObjects = [
-  {
-    name: "Github",
-    href: "https://github.com/Psycho-not0078/",
-    linkTitle: `${SITE.title} on Github`,
-    active: true,
-  },
-  {
-    name: "LinkedIn",
-    href: "https://www.linkedin.com/in/sathya-narayana-bhat/",
-    linkTitle: `${SITE.title} on LinkedIn`,
-    active: true,
-  },
-  {
-    name: "Mail",
-    href: "mailto:hello@homeserverfail.in",
-    linkTitle: `Send an email to ${SITE.author}`,
-    active: true,
-  },
-];
+export default config;
