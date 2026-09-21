@@ -3,9 +3,16 @@
   "include": [".astro/types.d.ts", "**/*"],
   "exclude": ["dist", "public/pagefind"],
   "compilerOptions": {
+    "jsx": "react-jsx",
+    "jsxImportSource": "react",
     "paths": {
       "@/*": ["./src/*"],
-      "@/astro-paper.config": ["./astro-paper.config"]
+      "@/astro-paper.config": ["./astro-paper.config"],
+      "@config": ["./src/config.ts"],
+      "@assets/*": ["./src/assets/*"],
+      "@components/*": ["./src/components/*"],
+      "@layouts/*": ["./src/layouts/*"],
+      "@utils/*": ["./src/utils/*"]
     }
   }
 }
