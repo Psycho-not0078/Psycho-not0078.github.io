@@ -1,18 +1,20 @@
 name: CI
 run-name: 🚀 Render Blog
-on: 
+on:
   push:
-      branches: ['main']
+    branches: ['main']
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 
 jobs:
   build:
     name: Code standards & build
     runs-on: ubuntu-latest
     timeout-minutes: 3
-
-    permissions:
-      pages: write      # to deploy to Pages
-      id-token: write   # to verify the deployment originates from an appropriate source
 
     # Deploy to the github-pages environment
     environment:
@@ -50,7 +52,7 @@ jobs:
                   ./update_timestamp.sh "$timestamp" $added_files create
                 fi
             done
-                  
+
       - name: Install, build, and upload your site
         uses: withastro/action@v6
         
