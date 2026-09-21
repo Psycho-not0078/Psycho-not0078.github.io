@@ -29,16 +29,6 @@ jobs:
         with:
           fetch-depth: 2
 
-      - name: "🔧 Setup Node.js ${{ matrix.node-version }}"
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: "npm"
-          cache-dependency-path: ./package.json
-
-      - name: "📦 Install dependencies"
-        run: npm install && npm ci
-      
       - name: Get changed files
         id: changed-files
         run: |
@@ -60,19 +50,17 @@ jobs:
                   ./update_timestamp.sh "$timestamp" $added_files create
                 fi
             done
-
-
-      - name: "🔎 Lint code"
-        if: steps.changed-files.outcome == 'success'
-        run: npm run lint
-
-      - name: "🚀 Build the project"
-        run: npm run build
+                  
+      - name: Install, build, and upload your site
+        uses: withastro/action@v6
         
-      - name: "Upload Pages Artifact"
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: "./dist/"
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4 
+        uses: actions/deploy-pages@v5
