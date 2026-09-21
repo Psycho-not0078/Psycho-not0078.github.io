@@ -23,7 +23,7 @@ I am writing this after the first night in ~6 months that nothing crashed and no
 
 Getting there involved a lot of nights that were not like that. An early one went like: the `cloudflared` logs said connected. The Pods said running. Traefik said routing. The browser said nothing at all. Turns out everything was working as intended which also included the firewall which was just quietly dropping all incoming requests by default.
 
-This is an ongoing journey, so I thought I would write it down as I go, partly as a record of how and why I got into self-hosting and Kubernetes, and partly in case it saves someone else a few hours. I have split this post into three parts: Why, What, and How.
+This is an ongoing journey, so I thought I would write it down as I go, partly as a record of how and why I got into self-hosting and Kubernetes, and partly in case it saves someone else a few hours. I have split this post into three parts: Why, What, and How. So ![without further ado.](https://media1.tenor.com/m/6oRIXbXYO4MAAAAd/so-without-further-ado-lets-do-this.gif)
 
 ## Why? (The Motive)
 
