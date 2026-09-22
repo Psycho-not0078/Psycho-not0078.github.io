@@ -83,9 +83,17 @@ The catch is that this route is the ***only*** route. A laptop two metres from t
 Ideally I'd point a DNS record on my router at the LoadBalancer IP, but mine doesn't support that. Instead, a wildcard `*.local.homeserverfail.in` in public DNS points at the server's LAN address, so in-network clients resolve straight to the box.
 
 ### Getting to the right place
+Before starting let me start i should explain why gateway API instead of the trusty ol kubernetes ingress. Well simple answer the ease in shifing the controller when required. The only difference in both Gateway API and Ingress is that Gateway API is modular and allows in keeping every part of the traffic control in proper code.
+
 There are two ways to do this. The simple one: point cloudflared straight at each application's service URL, e.g. jellyfin-service.jellyfin.svc.cluster.local, and call it a day. The other: point the tunnel at a gateway and let it do the routing. cloudflared preserves the original Host header, so a request for jellyfin.homeserverfail.in reaches Traefik with that hostname intact and the matching HTTPRoute picks it up. I add each hostname to the tunnel explicitly and send them all to the same gateway service, slightly more config than a catch-all, but nothing routes into the cluster unless I've listed it.
 
 My initial manifests had no gateway or ingress controller; it seemed like maintenance I didn't need. What changed my mind was realising I had no control over traffic once it entered the cluster. If I want SSO in front of these apps, something has to sit between cloudflared and the service to enforce it, and with a direct tunnel-to-service mapping, there's nowhere to put it. 
+
+So basically this is the flow of traffic for my services:
+
+![alt text](<../../assets/images/Untitled Diagram.drawio(5).png>)
+
+I do plan on implementing a service mesh too in the near future to secure inter deployment/pod networking, tho it has its additional benifits which i ll talk about later.
 
 ### What's actually running   
 
