@@ -15,8 +15,7 @@ tags:
   - selfhosting
   - homelab
 description:
-  Why I put Kubernetes on an old laptop with a dying screen to run Jellyfin,
-  and every way it fell over between kind and k3s.
+  Why I put Kubernetes on an old laptop with a dying screen to run Jellyfin, and every way it fell over between kind and k3s.
 ---
 
 I am writing this after the first night in ~6 months that nothing crashed and nothing went unreachable. The whole cluster is described in a Git repo now, every service is behind Traefik with real certificates, and I can rebuild the server from scratch if the disk dies. Mostly.
@@ -95,8 +94,41 @@ So basically this is the flow of traffic for my services:
 
 I do plan on implementing a service mesh too in the near future to secure inter deployment/pod networking, tho it has its additional benifits which i ll talk about later.
 
-### What's actually running   
-
 ### What keeps it running
+
+Before getting to where a request ends up, here's what everything sits on: the cluster itself, and the tools running in the background that handle the nitty gritty.
+
+#### The cluster
+
+I started on kind (Kubernetes IN Docker), where every node is just a Docker container that you label as a control plane or a worker. It felt closer to a real multi-node cluster than minikube, and setting up kubeadm looked daunting (P.S. it still does).
+
+kind was never the problem for deploying things. It was the problem for running them. As soon as a few people were streaming at once, playback went ssslllooowww, and that was direct play, with no transcoding involved. Every stream took the scenic route: through Docker's networking, through bind mounts into a container pretending to be a node, and out through the tunnel. I never pinned down which layer hurt most. That's not really kind's fault. It's built for throwaway test clusters, and I was asking it to be a 24/7 media server.
+
+So I did what any (in?)sane person would do and jumped to kubeadm... Nah, still daunting. I landed on K3s instead, a certified Kubernetes distribution that ships as a single binary. It comes with batteries included: Traefik, ServiceLB for LoadBalancer IPs, a local-path storage provisioner, and SQLite in place of etcd. Tho to be fair, I disabled the bundled Traefik (`--disable=traefik`). K3s installs it from its own manifests outside Argo CD, and I wanted the repo to be the end-all, be-all for redeployment, so Traefik gets deployed from Git like everything else.
+
+A few things had to be wired up so the hardware from earlier was actually usable:
+
+- **Storage:** The laptop has two drives, a 2 TB SSD and a 1 TB HDD. The SSD holds everything that benefits from fast reads and writes: video and app configs. The HDD gets what doesn't care about speed, like books and backups. Rather than handing whole disks to the cluster, I expose specific folders from each through local-path volumes. Ideally this would be something like NFS, so a second node could reach the same data, but that needs a second machine, and right now I'm broke with exactly one laptop ૮(˶╥︿╥)ა
+- **GPUs:**  I started out trying to transcode on the GTX 1050, but I could never get transcoding to work reliably, and the 1050 isn't a great transcoding card to begin with. Then it clicked that the laptop also has an Intel iGPU, and Quick Sync needs no proprietary driver at all. Jellyfin now transcodes on the iGPU, and the 1050 is free for work that actually wants CUDA.
+
+Adding a second node is a single `k3s agent` join command, which is the "config change, not a rebuild" I promised myself. 
+
+#### The platform layer
+
+None of these touch a request on its way to Jellyfin, but they're the reason the cluster is a Git repo and not a pile of commands I ran once and forgot. They're also where most of the DevSecOps learning happened.
+
+**Argo CD**: GitOps. Argo CD watches the repo and makes the cluster match it. I push a commit, and it applies the change. If I edit something by hand with kubectl, it notices the drift and puts it back. [TODO: one line on why Argo CD over Flux, e.g. the UI, app-of-apps pattern, or just what you learned first.]
+
+**Sealed Secrets**: GitOps means everything goes into Git, including passwords and API tokens, which is a problem. Sealed Secrets fixes that: the controller in the cluster holds a private key, and anyone with the public key can encrypt a secret, but only the cluster can decrypt it. The repo can be read by anyone without leaking anything. The catch: if the cluster dies and that private key dies with it, every sealed secret in the repo becomes permanently unreadable. [TODO: how you back up the sealing key, or admit you don't yet. This might be the "Mostly."]
+
+**cert-manager**: Issues and renews TLS certificates for the Gateways. [TODO: issuer, e.g. Let's Encrypt with a DNS-01 challenge through the Cloudflare API, which is also the only way to get the `*.local.homeserverfail.in` wildcard.] This is the part I mentioned earlier: enforcing TLS is easy, and renewal is the hard part. cert-manager is what makes renewal someone else's problem.
+
+**CloudNativePG**: The shared Postgres for everything that needs a real database. Jellyfin sticks to SQLite, but [TODO: which apps use it]. [TODO: backups, if you have them, since this is the other thing a rebuild depends on.]
+
+**MeshCentral**: Agent-based remote access to [TODO: the laptop itself? other machines?]. Not strictly required, but hella useful when something has broken badly enough that kubectl can't reach it. [TODO: one line on how it's exposed and locked down, since readers will ask.]
+
+
+### What's actually running   
+Now on to the meat and potatos
 
 ## How? (The Journey)
