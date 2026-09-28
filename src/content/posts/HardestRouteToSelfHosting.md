@@ -140,7 +140,7 @@ Now on to the meat and potatoes: what's actually running on the cluster. And oh 
 - **Tracearr:** playback stats for Jellyfin
 
 #### Everyday apps
-- **Vaultwarden:** self-hosted Bitwarden-compatible password manager [TODO: one line on how it's exposed and backed up]
+- **Vaultwarden:** self-hosted Bitwarden-compatible password manager
 - **Mealie:** recipe manager
 - **BentoPDF:** PDF editing
 
